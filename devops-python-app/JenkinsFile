@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'studydocs/devops-python-app'
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/DixitMehta/Devops-python-app.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'docker build -t %DOCKER_IMAGE% devops-python-app/'
+            }
+        }
+
+        stage('Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    bat 'echo %PASS% | docker login -u %USER% --password-stdin'
+                    bat 'docker push %DOCKER_IMAGE%'
+                }
+            }
+        }
+        
+
+        stage('Deploy') {
+            steps {
+                bat 'kubectl --kubeconfig=C:\\ProgramData\\Jenkins\\.jenkins\\.kube\\config apply -f devops-python-infra/'
+            }
+        }
+
+	stage('Update Manifest Repo') {
+    steps {
+        powershell '''
+        (Get-Content deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content deployment.yaml
+        git commit -am "Update image to v2"
+        git push
+        '''
+    }
+}
+}
+}
