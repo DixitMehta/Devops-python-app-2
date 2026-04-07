@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'studydocs/devops-python-app'
+        DOCKER_IMAGE = 'studydocs/devops-python-app-2'
     }
 
     stages {
         stage('Clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/DixitMehta/Devops-python-app.git'
+                git branch: 'main', url: 'https://github.com/DixitMehta/Devops-python-app-2.git'
             }
         }
 
