@@ -15,6 +15,13 @@ pipeline {
             }
         }
 
+		stage('Checkout') {
+        	    steps {
+            	    git branch: 'main',
+                	    url: 'https://github.com/DixitMehta/Devops-python-app-2.git'
+            }
+        }
+
         stage('Clone') {
             steps {
                 git branch: 'main', url: 'https://github.com/DixitMehta/Devops-python-app-2.git'
@@ -40,7 +47,7 @@ pipeline {
 	stage('Update Manifest Repo') {
     steps {
         powershell '''
-        (Get-Content ../devops-python-infra/deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content ../devops-python-infra/deployment.yaml
+        (Get-Content /devops-python-infra/deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content /devops-python-infra/deployment.yaml
         git commit -am "Update image to v2"
         git push --set-upstream origin main
         '''
