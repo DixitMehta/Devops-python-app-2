@@ -5,7 +5,16 @@ pipeline {
         DOCKER_IMAGE = 'studydocs/devops-python-app-2'
     }
 
-    stages {
+	stages {
+        stage('Configure Git') {
+            steps {
+                bat '''
+                    git config user.name "Jenkins CI"
+                    git config user.email "jenkins@yourcompany.com"
+                '''
+            }
+        }
+
         stage('Clone') {
             steps {
                 git branch: 'main', url: 'https://github.com/DixitMehta/Devops-python-app-2.git'
@@ -33,7 +42,7 @@ pipeline {
         powershell '''
         (Get-Content ../devops-python-infra/deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content ../devops-python-infra/deployment.yaml
         git commit -am "Update image to v2"
-        git push
+        git push --set-upstream origin main
         '''
     }
 }
