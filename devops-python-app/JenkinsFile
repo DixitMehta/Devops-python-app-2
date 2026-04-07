@@ -47,10 +47,10 @@ pipeline {
 	stage('Update Manifest Repo') {
     steps {
         powershell '''
-        (Get-Content devops-python-infra/deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content devops-python-infra/deployment.yaml
+        (Get-Content devops-python-infra/Deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content devops-python-infra/Deployment.yaml
         git add devops-python-infra/Deployment.yaml
 		git commit -m "Update Deployment.yaml to latest version"
-        git push origin main --verbose
+        git push origin main -Verbose
         '''
     }
 }
