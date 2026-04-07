@@ -31,7 +31,7 @@ pipeline {
 	stage('Update Manifest Repo') {
     steps {
         powershell '''
-        (Get-Content deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content deployment.yaml
+        (Get-Content ./devops-python-infra/deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content ./devops-python-infra/deployment.yaml
         git commit -am "Update image to v2"
         git push
         '''
