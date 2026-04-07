@@ -28,12 +28,6 @@ pipeline {
         }
         
 
-        stage('Deploy') {
-            steps {
-                bat 'kubectl --kubeconfig=C:\\ProgramData\\Jenkins\\.jenkins\\.kube\\config apply -f devops-python-infra/'
-            }
-        }
-
 	stage('Update Manifest Repo') {
     steps {
         powershell '''
