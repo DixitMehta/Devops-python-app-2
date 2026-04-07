@@ -48,7 +48,8 @@ pipeline {
     steps {
         powershell '''
         (Get-Content devops-python-infra/deployment.yaml) -replace 'myapp:v1','myapp:v2' | Set-Content devops-python-infra/deployment.yaml
-        git commit -m "Update image to v2"
+        git add devops-python-infra/Deployment.yaml
+		git commit -m "Update Deployment.yaml to latest version"
         git push origin main --verbose
         '''
     }
