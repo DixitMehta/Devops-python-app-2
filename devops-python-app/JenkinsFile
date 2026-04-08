@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/DixitMehta/Devops-python-app-2.git',
-                    credentialsId: 'git-creds'
+                    # credentialsId: 'Github'    #use when repo is private
             }
         }
 
