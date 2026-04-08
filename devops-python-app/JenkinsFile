@@ -70,7 +70,7 @@ pipeline {
                 git commit -m "Updated image to $tag"
 
                 # Push using credentials
-                git push https://$env:GIT_USER:$env:GIT_PASS@github.com/<your-username>/<your-repo>.git HEAD:main
+                git push https://$env:GIT_USER:$env:GIT_PASS@github.com/DixitMehta/Devops-python-app-2.git HEAD:main
 
                 Write-Host "Manifest updated and pushed successfully"
 
