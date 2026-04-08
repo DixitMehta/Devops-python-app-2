@@ -47,7 +47,7 @@ pipeline {
                 powershell '''
 
                 $file = "devops-python-infra/App Deployment.yaml"
-                $imageName = "studydocs/devops-python-app"
+                $imageName = "studydocs/devops-python-app-2"
                 $tag = $env:IMAGE_TAG
 
                 Write-Host "Updating image to ${imageName}:$tag"
@@ -56,7 +56,7 @@ pipeline {
                 $content = Get-Content "$file"
 
                 # Replace ONLY your app image
-                $updated = $content -replace "studydocs/devops-python-app:.*", "$imageName`:$tag"
+                $updated = $content -replace "studydocs/devops-python-app-2:.*", "$imageName`:$tag"
 
                 # Save file
                 $updated | Set-Content "$file"
