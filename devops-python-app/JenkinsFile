@@ -50,7 +50,7 @@ pipeline {
                 $imageName = "studydocs/devops-python-app"
                 $tag = $env:IMAGE_TAG
 
-                Write-Host "Updating image to $imageName:$tag"
+                Write-Host "Updating image to ${imageName}:$tag"
 
                 # Read file
                 $content = Get-Content "$file"
