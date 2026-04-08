@@ -15,7 +15,7 @@ spec:
         spec:
             containers:
             - name: app
-              image: studydocs/devops-python-app-2:84
+              image: studydocs/devops-python-app-2:86
               imagePullPolicy: Always  
               ports:
               - containerPort: 5000
