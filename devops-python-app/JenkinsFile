@@ -8,16 +8,17 @@ pipeline {
 
     stages {
 
-        stage('Checkout App Repo') {
+        stage('Checkout Repo') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/DixitMehta/Devops-python-app-2.git'
+                    url: 'https://github.com/DixitMehta/Devops-python-app-2.git',
+                    credentialsId: 'git-creds'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t %DOCKER_IMAGE%:%IMAGE_TAG% devops-python-app/"
+                bat "docker build -t %DOCKER_IMAGE%:%IMAGE_TAG% devops-python-app-2/"
             }
         }
 
@@ -36,41 +37,29 @@ pipeline {
             }
         }
 
-        stage('Clone Manifest Repo') {
-            steps {
-                dir('infra-repo') {
-                    git branch: 'main',
-                        url: 'https://github.com/DixitMehta/devops-python-infra.git'
-                }
-            }
-        }
-
         stage('Update Manifest & Push') {
             steps {
-                dir('infra-repo') {
-                    withCredentials([usernamePassword(
-                        credentialsId: 'git-creds',
-                        usernameVariable: 'GIT_USER',
-                        passwordVariable: 'GIT_PASS'
-                    )]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'git-creds',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_PASS'
+                )]) {
 
-                        powershell '''
-                        
-                        git config user.name "Jenkins CI"
-                        git config user.email "jenkins@yourcompany.com"
+                    powershell '''
+                    
+                    git config user.name "Jenkins CI"
+                    git config user.email "jenkins@yourcompany.com"
 
-                        # Replace image tag dynamically
-                        (Get-Content Deployment.yaml) -replace 'myapp:.*',"myapp:$env:IMAGE_TAG" | Set-Content Deployment.yaml
+                    # Update image tag inside SAME repo
+                    (Get-Content devops-python-infra/"App Deployment.yaml") -replace 'myapp:.*',"myapp:$env:IMAGE_TAG" | Set-Content devops-python-infra/"App Deployment.yaml"
 
-                        git add Deployment.yaml
-                        git commit -m "Update image to $env:IMAGE_TAG"
+                    git add "devops-python-infra/App Deployment.yaml"
+                    git commit -m "Update image to $env:IMAGE_TAG"
 
-                        git remote set-url origin https://$env:GIT_USER:$env:GIT_PASS@github.com/DixitMehta/devops-python-infra.git
-
-                        git push origin HEAD:main
-                        
-                        '''
-                    }
+                    # Push using credentials
+                    git push https://$env:GIT_USER:$env:GIT_PASS@github.com/DixitMehta/Devops-python-app-2.git HEAD:main
+                    
+                    '''
                 }
             }
         }
