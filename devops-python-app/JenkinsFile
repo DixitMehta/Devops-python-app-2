@@ -39,28 +39,45 @@ pipeline {
         stage('Update Manifest & Push') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'Github',
-                    usernameVariable: 'GIT_USER',
-                    passwordVariable: 'GIT_PASS'
-                )]) {
+                credentialsId: 'Github',
+                usernameVariable: 'GIT_USER',
+                passwordVariable: 'GIT_PASS'
+            )]) 
+            {
+                powershell '''
 
-                    powershell '''
-                    
-                    git config user.name "Jenkins CI"
-                    git config user.email "jenkins@yourcompany.com"
+                $file = "devops-python-infra/App Deployment.yaml"
+                $imageName = "studydocs/devops-python-app"
+                $tag = $env:IMAGE_TAG
 
-                    # Update image tag inside SAME repo
-                    (Get-Content devops-python-infra/"App Deployment.yaml") -replace 'myapp:.*',"myapp:$env:IMAGE_TAG" | Set-Content devops-python-infra/"App Deployment.yaml"
+                Write-Host "Updating image to $imageName:$tag"
 
-                    git add "devops-python-infra/App Deployment.yaml"
-                    git commit -m "Update image to $env:IMAGE_TAG"
+                # Read file
+                $content = Get-Content "$file"
 
-                    # Push using credentials
-                    git push https://$env:GIT_USER:$env:GIT_PASS@github.com/DixitMehta/Devops-python-app-2.git HEAD:main
-                    
-                    '''
-                }
-            }
-        }
+                # Replace ONLY your app image
+                $updated = $content -replace "studydocs/devops-python-app:.*", "$imageName`:$tag"
+
+                # Save file
+                $updated | Set-Content "$file"
+
+                # Git config
+                git config user.name "Jenkins CI"
+                git config user.email "jenkins@yourcompany.com"
+
+                # Commit changes
+                git add "$file"
+                git commit -m "Updated image to $tag"
+
+                # Push using credentials
+                git push https://$env:GIT_USER:$env:GIT_PASS@github.com/<your-username>/<your-repo>.git HEAD:main
+
+                Write-Host "Manifest updated and pushed successfully"
+
+                '''
     }
+}
+}
+
+        }
 }
