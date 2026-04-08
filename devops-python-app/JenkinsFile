@@ -40,7 +40,7 @@ pipeline {
         stage('Update Manifest & Push') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'git-creds',
+                    credentialsId: 'Github',
                     usernameVariable: 'GIT_USER',
                     passwordVariable: 'GIT_PASS'
                 )]) {
