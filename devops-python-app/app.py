@@ -36,7 +36,7 @@ def get():
 
 @app.route("/")
 def home():
-    return "DevOps Python App Running 🚀"
+    return "DevOps Python App Running 🚀.....Stay Tuned..."
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
