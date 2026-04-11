@@ -15,6 +15,39 @@ pipeline {
             }
         }
 
+stage('Terraform Init') {
+        steps {
+            dir('terraform') {
+                powershell 'terraform init'
+            }
+        }
+    }
+
+    stage('Terraform Validate') {
+        steps {
+            dir('terraform') {
+                powershell 'terraform validate'
+            }
+        }
+    }
+
+    stage('Terraform Plan') {
+        steps {
+            dir('terraform') {
+                powershell 'terraform plan -out=tfplan'
+            }
+        }
+    }
+
+    stage('Terraform Apply') {
+        steps {
+            dir('terraform') {
+                powershell 'terraform apply -auto-approve tfplan'
+            }
+        }
+    }
+
+
         stage('Build Docker Image') {
             steps {
                 bat "docker build -t %DOCKER_IMAGE%:%IMAGE_TAG% devops-python-app/"
