@@ -46,4 +46,5 @@ def home():
     return "DevOps Python App Running 🚀.....Stay Tuned...23:46 11-04-2026"
 
 if __name__ == "__main__":
+    start_http_server(8000)
     app.run(host="0.0.0.0", port=5000)
