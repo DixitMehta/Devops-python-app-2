@@ -2,13 +2,6 @@ from flask import Flask, request, jsonify
 import mysql.connector
 import os
 from prometheus_client import start_http_server, Counter
-requests_total = Counter('requests_total', 'Total requests')
-
-@app.route('/')
-def home():
-    requests_total.inc()
-    return "Hello"
-
 app = Flask(__name__)
 
 def get_db_connection():
@@ -19,6 +12,13 @@ def get_db_connection():
         database="testdb"
     )
 
+#Monitoring
+requests_total = Counter('requests_total', 'Total requests')
+@app.route('/')
+def home():
+    requests_total.inc()
+    return "Hello"
+    
 @app.route("/add", methods=["POST"])
 def add():
     data = request.json
