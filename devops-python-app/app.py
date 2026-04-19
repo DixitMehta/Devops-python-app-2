@@ -43,7 +43,7 @@ def get():
 
 @app.route("/")
 def home():
-    return "DevOps Python App Running 🚀.....Stay Tuned...23:46 11-04-2026"
+    return "DevOps Python App Running 🚀.....Stay Tuned...Monitoring in progess..."
 
 if __name__ == "__main__":
     start_http_server(8000)
