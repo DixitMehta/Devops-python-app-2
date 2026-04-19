@@ -13,11 +13,7 @@ def get_db_connection():
     )
 
 #Monitoring
-requests_total = Counter('requests_total', 'Total requests')
-@app.route('/')
-def home():
-    requests_total.inc()
-    return "Hello"
+requests_total = Counter('requests_total', 'Total requests') 
     
 @app.route("/add", methods=["POST"])
 def add():
@@ -44,6 +40,8 @@ def get():
 @app.route("/")
 def home():
     return "DevOps Python App Running 🚀.....Stay Tuned...Monitoring in progess..."
+    requests_total.inc()
+    return "Hello"
 
 if __name__ == "__main__":
     start_http_server(8000)
